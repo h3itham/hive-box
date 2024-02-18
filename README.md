@@ -85,7 +85,11 @@ Note that I Will use [GitFlow](https://www.atlassian.com/git/tutorials/comparing
   git merge release/v0.1.0
   ```
 
-* git tag -a v0.1.0 -m "Release v0.1.0" 
+* Create version tag
+
+  ```bash
+  git tag -a v0.1.0 -m "Release v01.0"
+  ```
 
 * Switch to development branch build/run Docker image
 
