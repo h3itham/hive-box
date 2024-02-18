@@ -65,7 +65,7 @@ Note that I Will use [GitFlow](https://www.atlassian.com/git/tutorials/comparing
 * Create release branch for Docker configuration 
 
   ```bash 
-  git checkout release/v0.1.0 
+  git checkout -b release/v0.1.0 
   ```
 
 * Adding Dockerfile to project 
