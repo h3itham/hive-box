@@ -1,8 +1,8 @@
 # Hive-box
-> **Note:** This project is currently under development.
+
 
 ## Introduction 
-Note: This project is currently under developme
+> **Note:** This project is currently under development.
 
 Welcome to the ambitious project aimed at revolutionizing beekeeping through the development of a comprehensive and scalable RESTful API. The primary objective of this endeavor is to leverage the power of [OpenSenseMap](https://www.opensensemap.org/) to provide a robust platform that caters specifically to the needs of beekeepers, streamlining their daily chores and enhancing overall efficiency. A distinctive aspect of this project is the commitment to document each phase comprehensively. This documentation effort will provide a transparent and insightful journey into the development process, offering valuable resources for users, developers, and beekeeping enthusiasts alike. Finally, I'd like to express gratitude to [Ahmed AboZied](https://www.linkedin.com/in/aabouzaid/) and [DevOps Hive](https://devopshive.net/), particularly for their contribution to the [dynamic-devops-roadmap](https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap/tree/main). 
 
