@@ -31,11 +31,10 @@ jobs:
         run: |
           pip install flake8
           flake8 --max-line-length=88 .
-
-      - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v1
+      - name: Hlint
+        uses: hadolint/hadolint-action@v1.5.0
         with:
-          dockerfile: Dockerfile
+         dockerfile: Dockerfile
 
       - name: Run unit tests
         run: |
