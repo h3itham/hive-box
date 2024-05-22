@@ -3,7 +3,11 @@ name: Deploy FastAPI App
 on:
   push:
     branches:
+<<<<<<< HEAD
       - master  
+=======
+      - master
+>>>>>>> 073e542e1498ae0707d259ffb3c23c8d6a312c27
   pull_request:
     branches:
       - master 
