@@ -47,7 +47,17 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-app:latest .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-app:${{ env.BUILD_INFO }} .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-app:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-app:${{ env.BUILD_INFO }}
+      
+      - name: Run Scorecard analysis
+        uses: ossf/scorecard-action@v2
+        with:
+          results_file: results.sarif
+
+      - name: Upload Scorecard results
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: results.sarif
