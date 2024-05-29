@@ -186,17 +186,27 @@ I use [Conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) in 
   ```bash
   git tag -a v3.2.0  -m "Release v3.2.0 "
   ```
+* Push Changes to remote repo 
+
+  ```bash 
+  git push origin dev 
+  git push origin master 
+  git push origin --tags 
+  ```
 
 ### 3.3 Containers 
 To ensure optimal performance and security in your Docker containers, use a minimal base image like alpine to reduce the image size and specify a version instead of using latest. This approach decreases the attack surface and speeds up deployment times.
 ### 3.4 Continuous Integration. 
 
+To automate the testing and deployment of the FastAPI application, I  have created a GitHub Actions workflow. This workflow includes steps to  lint the code, build the Docker image, and run unit tests. Additionally, I have configured the workflow to push the Docker image to Docker Hub  using my credentials. Here is an overview of the process:
 
-
-
-
-
-
-
-
+1. **Checkout Code**: The workflow starts by checking out the repository's code.
+2. **Set Up Python**: It sets up the Python environment with the specified version.
+3. **Install Dependencies**: The necessary Python packages are installed.
+4. **Lint Python Code**: Python code is linted using flake8 to ensure it follows coding standards.
+5. **Lint Dockerfile**: The Dockerfile is linted using Hadolint to check for best practices.
+6. **Run Unit Tests**: Unit tests are executed to verify the functionality of the application.
+7. **Log in to Docker Hub**: The workflow logs into Docker Hub using the provided credentials.
+8. **Build Docker Image**: The Docker image for the application is built.
+9. **Push Docker Image**: The built Docker image is pushed to Docker Hub.
 
