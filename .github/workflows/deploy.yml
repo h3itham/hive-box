@@ -46,15 +46,22 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          
+      - name: Set build info
+        id: set_build_info
+        run: echo "BUILD_INFO=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      - name: Debug build info
+        run: echo "BUILD_INFO is $BUILD_INFO"
 
       - name: Build Docker image
-        run: docker build -t h3itham/fastapi-app:${{ env.BUILD_INFO }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-app:${{ env.BUILD_INFO }} .
 
       - name: Push Docker image
-        run: docker push h3itham/fastapi-app:${{ env.BUILD_INFO }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-app:${{ env.BUILD_INFO }}
 
       - name: Run Scorecard analysis
-        uses: ossf/scorecard-action@v2.3.3
+        uses: ossf/scorecard-action@v1
         with:
           clean: true 
           results_file: results.sarif
@@ -66,7 +73,7 @@ jobs:
 
       - name: Test /version endpoint
         run: |
-          docker run -d -p 8000:8000 h3itham/fastapi-app:${{ env.BUILD_INFO }}
+          docker run -d -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/fastapi-app:${{ env.BUILD_INFO }}
           sleep 10  # Wait for the app to start
           response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/version)
           if [ "$response" -ne 200 ]; then
@@ -76,5 +83,3 @@ jobs:
             echo "Endpoint /version test passed"
           fi
 
-
-          
