@@ -56,6 +56,7 @@ jobs:
       - name: Run Scorecard analysis
         uses: ossf/scorecard-action@v2
         with:
+          clean: true 
           results_file: results.sarif
 
       - name: Upload Scorecard results
