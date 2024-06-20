@@ -66,10 +66,10 @@ jobs:
           clean: true 
           results_file: results.sarif
 
-      - name: Upload Scorecard results
-        uses: github/codeql-action/upload-sarif@v2.3.3
-        with:
-          sarif_file: results.sarif
+      # - name: Upload Scorecard results
+      #   uses: github/codeql-action/upload-sarif@v2.3.3
+      #   with:
+      #     sarif_file: results.sarif
 
       - name: Test /version endpoint
         run: |
