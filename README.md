@@ -210,3 +210,16 @@ To automate the testing and deployment of the FastAPI application, I  have creat
 8. **Build Docker Image**: The Docker image for the application is built.
 9. **Push Docker Image**: The built Docker image is pushed to Docker Hub.
 
+After adding the workflow file, I committed the changes to Git and pushed them to the `dev` branch. After merging the `dev` branch into the `master` branch, the GitHub Action started running the workflow with all the steps.
+
+````bash 
+git add .github/workflow/deploy.yaml
+git commit -m "adding continuos integration pipeline"
+git push 
+# Merge dev on master 
+git switch master 
+git merge dev 
+````
+
+The workflow start run automatically and here is the result. 
+![image](./img/03-success%20build.png)
