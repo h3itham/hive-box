@@ -3,16 +3,16 @@ name: Deploy FastAPI App
 on:
   push:
     branches:
-
-      - master  
+      - master
   pull_request:
     branches:
-      - master 
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -31,10 +31,11 @@ jobs:
         run: |
           pip install flake8
           flake8 --max-line-length=88 app/
+          
       - name: Hlint
         uses: hadolint/hadolint-action@v1.5.0
         with:
-         dockerfile: Dockerfile
+          dockerfile: Dockerfile
 
       - name: Run unit tests
         run: |
@@ -51,7 +52,7 @@ jobs:
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-app:${{ env.BUILD_INFO }}
-      
+
       - name: Run Scorecard analysis
         uses: ossf/scorecard-action@v1
         with:
@@ -61,3 +62,16 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: results.sarif
+
+      - name: Test /version endpoint
+        run: |
+          docker run -d -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/fastapi-app:${{ env.BUILD_INFO }}
+          sleep 10  # Wait for the app to start
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/version)
+          if [ "$response" -ne 200 ]; then
+            echo "Endpoint /version test failed"
+            exit 1
+          else
+            echo "Endpoint /version test passed"
+          fi
+
