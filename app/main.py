@@ -1,7 +1,21 @@
 from fastapi import FastAPI, HTTPException
 import requests
+import os
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
+
+# READ SENSEBOX IDS FROM ENVIRONMENT VARIABLES, OR PROVIDE A DEFAULT LIST
+SENSEBOX_IDS = os.getenv(
+    "SENSEBOX_IDS",
+    "5eba5fbad46fb8001b799786,5e02b67d475fc6001a132e31,5eba5fbad46fb8001b799786"
+).split(",")
+
+# Initialize the Prometheus Instrumentator
+instrumentator = Instrumentator()
+
+# Attach Prometheus metrics collection to the app
+instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
 
 @app.get("/version")
@@ -11,17 +25,15 @@ def read_version():
 
 @app.get("/temperature")
 def read_temperature():
-    box_ids = [
-        "5eba5fbad46fb8001b799786",
-        "5e02b67d475fc6001a132e31",
-        "5eba5fbad46fb8001b799786"
-    ]
     temperatures = []
 
-    for box_id in box_ids:
+    for box_id in SENSEBOX_IDS:
         response = requests.get(
             f'https://api.opensensemap.org/boxes/{box_id}?format=json'
         )
+        if response.status_code != 200:
+            continue
+
         data = response.json()
 
         for sensor in data['sensors']:
@@ -36,7 +48,7 @@ def read_temperature():
             continue
 
     if not temperatures:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="No temperature data found")
 
     average_temperature = sum(temperatures) / len(temperatures)
     return {"average_temperature": average_temperature}
