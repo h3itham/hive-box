@@ -11,10 +11,10 @@ SENSEBOX_IDS = os.getenv(
     "5eba5fbad46fb8001b799786,5eb99cacd46fb8001b2ce04c,5e60cf5557703e001bdae7f8"
 ).split(",")
 
-# Initialize the Prometheus Instrumentator
+# INITIALIZE THE PROMETHEUS INSTRUMENTATOR
 instrumentator = Instrumentator()
 
-# Attach Prometheus metrics collection to the app
+# ATTACH PROMETHEUS METRICS COLLECTION TO THE APP
 instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
 
@@ -44,7 +44,7 @@ def read_temperature():
                     temperatures.append(temperature)
                     break
         else:
-            # If temperature data is not found for a box
+            # IF TEMPERATURE DATA IS NOT FOUND FOR A BOX
             continue
 
     if not temperatures:
@@ -54,6 +54,20 @@ def read_temperature():
     return {"average_temperature": average_temperature}
 
 
+    # DETERMINE STATUS BASED ON THE AVERAGE TEMPERATURE
+    if average_temperature < 10:
+        status = "Too Cold"
+    elif 11 <= average_temperature <= 36:
+        status = "Good"
+    else: 
+        status = "Too Hot"
+
+    return {
+        "average_temperature": average_temperature,
+        "status": status
+    }
+
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
