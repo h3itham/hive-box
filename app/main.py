@@ -8,7 +8,7 @@ app = FastAPI()
 # READ SENSEBOX IDS FROM ENVIRONMENT VARIABLES, OR PROVIDE A DEFAULT LIST
 SENSEBOX_IDS = os.getenv(
     "SENSEBOX_IDS",
-    "5eba5fbad46fb8001b799786,5e02b67d475fc6001a132e31,5eba5fbad46fb8001b799786"
+    "5eba5fbad46fb8001b799786,5eb99cacd46fb8001b2ce04c,5e60cf5557703e001bdae7f8"
 ).split(",")
 
 # Initialize the Prometheus Instrumentator
