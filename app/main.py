@@ -26,16 +26,14 @@ def read_version():
 @app.get("/temperature")
 def read_temperature():
     temperatures = []
-
     for box_id in SENSEBOX_IDS:
         response = requests.get(
             f'https://api.opensensemap.org/boxes/{box_id}?format=json'
         )
         if response.status_code != 200:
             continue
-
+        
         data = response.json()
-
         for sensor in data['sensors']:
             if sensor['title'] == 'Temperatur' and 'lastMeasurement' in sensor:
                 last_measure = sensor['lastMeasurement']
@@ -46,22 +44,20 @@ def read_temperature():
         else:
             # IF TEMPERATURE DATA IS NOT FOUND FOR A BOX
             continue
-
+    
     if not temperatures:
         raise HTTPException(status_code=404, detail="No temperature data found")
-
+    
     average_temperature = sum(temperatures) / len(temperatures)
-    return {"average_temperature": average_temperature}
-
-
+    
     # DETERMINE STATUS BASED ON THE AVERAGE TEMPERATURE
     if average_temperature < 10:
         status = "Too Cold"
-    elif 11 <= average_temperature <= 36:
+    elif 10 <= average_temperature <= 36:
         status = "Good"
-    else: 
+    else:
         status = "Too Hot"
-
+    
     return {
         "average_temperature": average_temperature,
         "status": status
