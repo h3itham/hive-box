@@ -3,11 +3,18 @@ import requests
 import os
 from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 
 app = FastAPI()
 
-app.mount("/frontend", StaticFiles(directory="frontend", html=True), name="frontend")
+# MOUNT STATIC FILE 
+app.mount("/static", StaticFiles(directory="frontend", html=True), name="frontend")
+
+# SERVE THE INDEX.HTML AT THE ROOT URL
+@app.get("/")
+async def read_root():
+    return FileResponse("frontend/index.html")
 
 # READ SENSEBOX IDS FROM ENVIRONMENT VARIABLES, OR PROVIDE A DEFAULT LIST
 SENSEBOX_IDS = os.getenv(
