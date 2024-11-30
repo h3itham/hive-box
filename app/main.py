@@ -2,8 +2,12 @@ from fastapi import FastAPI, HTTPException
 import requests
 import os
 from prometheus_fastapi_instrumentator import Instrumentator
+from fastapi.staticfiles import StaticFiles
+
 
 app = FastAPI()
+
+app.mount("/frontend", StaticFiles(directory="frontend", html=True), name="frontend")
 
 # READ SENSEBOX IDS FROM ENVIRONMENT VARIABLES, OR PROVIDE A DEFAULT LIST
 SENSEBOX_IDS = os.getenv(

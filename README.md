@@ -114,7 +114,7 @@ Note that I Will use [GitFlow](https://www.atlassian.com/git/tutorials/comparing
   ```
 
 
-## Phase 3
+## Phase 
 
 ### 3. 1Tools
 
@@ -223,3 +223,33 @@ git merge dev
 
 The workflow start run automatically and here is the result. 
 ![image](./img/03-success%20build.png)
+
+
+
+
+
+## Phase 4 
+
+1. **Configuration**
+   
+   - Created `.env` files to make box IDs configurable via environment variables.
+   
+2. **Metrics**
+   - Integrated **Prometheus** to expose application metrics via the `/metrics` endpoint.
+
+3. **Temperature Endpoint**
+   - Updated the `/temperature` endpoint to include a **temperature status**:
+     - `< 10`: Too Cold
+     - `11-36`: Good
+     - `> 37`: Too Hot
+
+4. **Code Quality & Analysis**
+   
+   - Installed and configured **SonarQube** on aws ec2 instance to perform:
+     - Code quality checks.
+     - Static code analysis.
+   
+   ![](./ScreenShots/4-sonarqube.png)
+
+## Phase 5 
+
