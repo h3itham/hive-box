@@ -1,5 +1,5 @@
 document.getElementById("fetchTempBtn").addEventListener("click", async () => {
-    const temperatureUrl = "http://localhost:8000/temperature"; 
+    const temperatureUrl = "http://192.168.1.12:8000/temperature"; 
     try {
       const response = await fetch(temperatureUrl);
       if (!response.ok) {
