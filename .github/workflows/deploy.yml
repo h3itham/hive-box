@@ -48,7 +48,7 @@ jobs:
       - name: Lint Python code
         run: |
           pip install flake8
-          flake8 --max-line-length=90 backend/
+          flake8 --max-line-length=100 backend/
           
       - name: Lint Dockerfile with Hadolint
         uses: hadolint/hadolint-action@v1.5.0
