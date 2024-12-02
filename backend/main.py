@@ -3,9 +3,7 @@ import requests
 import os
 from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.responses import FileResponse
-from flask_cors import CORS
-from fastapi.middleware.cors import CORSMiddleware 
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -22,6 +20,7 @@ app.add_middleware(
 async def read_root():
     return FileResponse("frontend/index.html")
 
+
 # READ SENSEBOX IDS FROM ENVIRONMENT VARIABLES, OR PROVIDE A DEFAULT LIST
 SENSEBOX_IDS = os.getenv(
     "SENSEBOX_IDS",
@@ -37,11 +36,9 @@ instrumentator = Instrumentator()
 # ATTACH PROMETHEUS METRICS COLLECTION TO THE APP
 instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
-
 @app.get("/version")
 def read_version():
     return {"version": "v0.0.1"}
-
 
 @app.get("/temperature")
 def read_temperature():
@@ -60,9 +57,9 @@ def read_temperature():
                     temperature = float(last_measure["value"])
                     temperatures.append(temperature)
                     break
-        else:
-            # IF TEMPERATURE DATA IS NOT FOUND FOR A BOX
-            continue
+            else:
+                # IF TEMPERATURE DATA IS NOT FOUND FOR A BOX
+                continue
 
     if not temperatures:
         raise HTTPException(status_code=404, detail="No temperature data found")
@@ -83,7 +80,6 @@ def read_temperature():
         "average_temperature": average_temperature,
         "status": status,
     }
-
 
 if __name__ == "__main__":
     import uvicorn
