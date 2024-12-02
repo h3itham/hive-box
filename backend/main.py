@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],  # ALLOWS ALL HEADERS
 )
 
-# SERVE THE INDEX.HTML AT THE ROOT URL
+
 @app.get("/")
 async def read_root():
     return FileResponse("frontend/index.html")
@@ -30,15 +30,18 @@ SENSEBOX_IDS = os.getenv(
     ),
 ).split(",")
 
+
 # INITIALIZE THE PROMETHEUS INSTRUMENTATOR
 instrumentator = Instrumentator()
 
 # ATTACH PROMETHEUS METRICS COLLECTION TO THE APP
 instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
+
 @app.get("/version")
 def read_version():
     return {"version": "v0.0.1"}
+
 
 @app.get("/temperature")
 def read_temperature():
@@ -49,9 +52,13 @@ def read_temperature():
         )
         if response.status_code != 200:
             continue
+
         data = response.json()
         for sensor in data["sensors"]:
-            if sensor["title"] == "Temperatur" and "lastMeasurement" in sensor:
+            if (
+                sensor["title"] == "Temperatur"
+                and "lastMeasurement" in sensor
+            ):
                 last_measure = sensor["lastMeasurement"]
                 if last_measure is not None and "value" in last_measure:
                     temperature = float(last_measure["value"])
@@ -64,9 +71,7 @@ def read_temperature():
     if not temperatures:
         raise HTTPException(status_code=404, detail="No temperature data found")
 
-    average_temperature = (
-        sum(temperatures) / len(temperatures)
-    )
+    average_temperature = sum(temperatures) / len(temperatures)
 
     # DETERMINE STATUS BASED ON THE AVERAGE TEMPERATURE
     if average_temperature < 10:
@@ -80,6 +85,7 @@ def read_temperature():
         "average_temperature": average_temperature,
         "status": status,
     }
+
 
 if __name__ == "__main__":
     import uvicorn
