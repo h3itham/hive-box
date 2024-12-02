@@ -1,5 +1,5 @@
 /env 
 __pycache__
 .pytest_cache 
-
 app/.env
+commands.txt 

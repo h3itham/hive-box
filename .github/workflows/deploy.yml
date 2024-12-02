@@ -48,7 +48,7 @@ jobs:
       - name: Lint Python code
         run: |
           pip install flake8
-          flake8 --max-line-length=90 app/
+          flake8 --max-line-length=90 backend/
           
       - name: Lint Dockerfile with Hadolint
         uses: hadolint/hadolint-action@v1.5.0
@@ -57,7 +57,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          pytest app/
+          pytest backend/
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
