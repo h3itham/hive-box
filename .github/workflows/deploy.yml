@@ -73,7 +73,7 @@ jobs:
         run: echo "BUILD_INFO is $BUILD_INFO"
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/backend-hivebox:${{ env.BUILD_INFO }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/backend-hivebox:${{ env.BUILD_INFO }} -f backend/Dockerfile .
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/backend-hivebox:${{ env.BUILD_INFO }}
