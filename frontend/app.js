@@ -1,5 +1,5 @@
 document.getElementById("fetchTempBtn").addEventListener("click", async () => {
-  const temperatureUrl = "http://192.168.1.12:8000/temperature"; 
+  const temperatureUrl = "http://backend.hive-box.svc.cluster.local:8000/temperature"; 
   console.log("Button clicked. Fetching temperature from:", temperatureUrl); // Add this log
   try {
     const response = await fetch(temperatureUrl);
