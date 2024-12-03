@@ -48,4 +48,6 @@ watchfiles==0.21.0
 websockets==12.0
 Werkzeug==3.0.3
 prometheus-fastapi-instrumentator
+redis==5.0.1
+hiredis==2.3.2
 

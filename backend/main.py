@@ -2,12 +2,19 @@ from fastapi import FastAPI, HTTPException
 import requests
 import os
 import redis
+import json
+import urllib.parse
 from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 app = FastAPI()
 
+# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,12 +23,39 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Connect to Redis
-REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
-REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
-REDIS_CACHE_TIMEOUT = int(os.getenv("CACHE_TIMEOUT", 300))
 
-redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+# Redis Configuration with robust parsing
+def parse_redis_url(redis_url):
+    # If it looks like a full URL, parse it
+    if redis_url.startswith('tcp://') or redis_url.startswith('redis://'):
+        parsed = urllib.parse.urlparse(redis_url)
+        return {
+            'host': parsed.hostname,
+            'port': parsed.port or 6379
+        }
+    
+    # If it's just a hostname or IP
+    return {
+        'host': redis_url,
+        'port': 6379
+    }
+
+# Parse Redis connection details
+redis_config = parse_redis_url(os.getenv('REDIS_HOST', 'localhost'))
+REDIS_HOST = redis_config['host']
+REDIS_PORT = redis_config['port']
+CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', 300))  # Default 5 minutes
+
+# Create Redis client
+redis_client = redis.Redis(
+    host=REDIS_HOST, 
+    port=REDIS_PORT, 
+    decode_responses=True,
+    # Optional: Add these for production
+    # ssl=True,
+    # ssl_cert_reqs=None
+)
+
 
 @app.get("/")
 async def read_root():
@@ -38,7 +72,6 @@ SENSEBOX_IDS = os.getenv(
 
 # INITIALIZE THE PROMETHEUS INSTRUMENTATOR
 instrumentator = Instrumentator()
-
 # ATTACH PROMETHEUS METRICS COLLECTION TO THE APP
 instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
@@ -50,12 +83,10 @@ def read_version():
 
 @app.get("/temperature")
 def read_temperature():
-    cache_key = "temperature_data"
-    cached_data = redis_client.get(cache_key)
-
+    # Try to get cached data first
+    cached_data = redis_client.get('temperature_data')
     if cached_data:
-        # Return cached response
-        return {"source": "cache", **eval(cached_data)}
+        return json.loads(cached_data)
 
     temperatures = []
     for box_id in SENSEBOX_IDS:
@@ -64,7 +95,7 @@ def read_temperature():
         )
         if response.status_code != 200:
             continue
-
+        
         data = response.json()
         for sensor in data["sensors"]:
             if (
@@ -85,7 +116,7 @@ def read_temperature():
 
     average_temperature = sum(temperatures) / len(temperatures)
 
-    # DETERMINE STATUS BASED ON THE AVERAGE TEMPERATURE
+    # Determine status based on the average temperature
     if average_temperature < 10:
         status = "Too Cold"
     elif 10 <= average_temperature <= 36:
@@ -93,15 +124,20 @@ def read_temperature():
     else:
         status = "Too Hot"
 
-    result = {
+    # Prepare response
+    response_data = {
         "average_temperature": average_temperature,
         "status": status,
     }
 
-    # Cache the result
-    redis_client.setex(cache_key, REDIS_CACHE_TIMEOUT, str(result))
+    # Cache the response
+    redis_client.setex(
+        'temperature_data', 
+        CACHE_TIMEOUT, 
+        json.dumps(response_data)
+    )
 
-    return {"source": "API", **result}
+    return response_data
 
 
 if __name__ == "__main__":
