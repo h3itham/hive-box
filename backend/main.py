@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 import requests
 import os
+import redis
 from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,17 +10,22 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ALLOWS ALL ORIGINS
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # ALLOWS ALL METHODS (GET, POST, ETC.)
-    allow_headers=["*"],  # ALLOWS ALL HEADERS
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
+# Connect to Redis
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+REDIS_CACHE_TIMEOUT = int(os.getenv("CACHE_TIMEOUT", 300))
+
+redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
 @app.get("/")
 async def read_root():
     return FileResponse("frontend/index.html")
-
 
 # READ SENSEBOX IDS FROM ENVIRONMENT VARIABLES, OR PROVIDE A DEFAULT LIST
 SENSEBOX_IDS = os.getenv(
@@ -29,7 +35,6 @@ SENSEBOX_IDS = os.getenv(
         "5e60cf5557703e001bdae7f8"
     ),
 ).split(",")
-
 
 # INITIALIZE THE PROMETHEUS INSTRUMENTATOR
 instrumentator = Instrumentator()
@@ -45,6 +50,13 @@ def read_version():
 
 @app.get("/temperature")
 def read_temperature():
+    cache_key = "temperature_data"
+    cached_data = redis_client.get(cache_key)
+
+    if cached_data:
+        # Return cached response
+        return {"source": "cache", **eval(cached_data)}
+
     temperatures = []
     for box_id in SENSEBOX_IDS:
         response = requests.get(
@@ -81,10 +93,15 @@ def read_temperature():
     else:
         status = "Too Hot"
 
-    return {
+    result = {
         "average_temperature": average_temperature,
         "status": status,
     }
+
+    # Cache the result
+    redis_client.setex(cache_key, REDIS_CACHE_TIMEOUT, str(result))
+
+    return {"source": "API", **result}
 
 
 if __name__ == "__main__":
