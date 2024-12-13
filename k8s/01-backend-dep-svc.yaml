@@ -4,7 +4,7 @@ metadata:
   name: hive-backend
   namespace: hive-box
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: hive-backend
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: hive-backend
-        image: h3itham/backend-hivebox:v1.0.0 
+        image: h3itham/backend-hivebox:v1.0.9
         ports:
         - containerPort: 8000
 ---
@@ -31,4 +31,4 @@ spec:
   - protocol: TCP
     port: 8000
     targetPort: 8000
-  type: ClusterIP
+  type: LoadBalancer
