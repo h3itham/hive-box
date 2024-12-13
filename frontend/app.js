@@ -1,6 +1,6 @@
 document.getElementById("fetchTempBtn").addEventListener("click", async () => {
-  const temperatureUrl = "https://kibana.iceage.me.uk/temperature"; 
-  console.log("Button clicked. Fetching temperature from:", temperatureUrl); // Add this log
+  const temperatureUrl = "/api/temperature"; // Use the reverse proxy endpoint
+  console.log("Button clicked. Fetching temperature from:", temperatureUrl);
   try {
     const response = await fetch(temperatureUrl);
     if (!response.ok) {
