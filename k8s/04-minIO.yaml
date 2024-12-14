@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: hive-box
+  labels:
+    app: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: minio/minio
+        args:
+        - server
+        - /data
+        env:
+        - name: MINIO_ROOT_USER
+          value: minioadmin
+        - name: MINIO_ROOT_PASSWORD
+          value: minioadmin
+        ports:
+        - containerPort: 9000
+          name: minio-port
+        volumeMounts:
+        - name: minio-storage
+          mountPath: /data
+      volumes:
+      - name: minio-storage
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: hive-box
+spec:
+  selector:
+    app: minio
+  ports:
+  - port: 9000
+    targetPort: 9000
+    protocol: TCP
+  clusterIP: None
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-minio-bucket
+  namespace: hive-box
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: minio-client
+        image: minio/mc
+        command:
+        - /bin/sh
+        - -c
+        - |
+          mc config host add minio http://minio:9000 minioadmin minioadmin
+          mc mb minio/hive-box
+          mc ls minio
+  backoffLimit: 4

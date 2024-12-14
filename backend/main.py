@@ -1,3 +1,4 @@
+# File: main.py
 from fastapi import FastAPI, HTTPException
 import requests
 import os
@@ -7,14 +8,19 @@ import urllib.parse
 from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+from minio import Minio
+from minio.error import S3Error
+import datetime
+import io
 
 # Load environment variables
-from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
 
-# CORS Middleware
+# CORS MIDDLEWARE
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,10 +29,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# Redis Configuration with robust parsing
+# REDIS CONFIGURATION WITH ROBUST PARSING
 def parse_redis_url(redis_url):
-    # If it looks like a full URL, parse it
+    # IF IT LOOKS LIKE A FULL URL, PARSE IT
     if redis_url.startswith('tcp://') or redis_url.startswith('redis://'):
         parsed = urllib.parse.urlparse(redis_url)
         return {
@@ -34,28 +39,43 @@ def parse_redis_url(redis_url):
             'port': parsed.port or 6379
         }
     
-    # If it's just a hostname or IP
+    # IF IT'S JUST A HOSTNAME OR IP
     return {
         'host': redis_url,
         'port': 6379
     }
 
-# Parse Redis connection details
+# PARSE REDIS CONNECTION DETAILS
 redis_config = parse_redis_url(os.getenv('REDIS_HOST', 'localhost'))
 REDIS_HOST = redis_config['host']
 REDIS_PORT = redis_config['port']
 CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', 300))  # Default 5 minutes
 
-# Create Redis client
+# CREATE REDIS CLIENT
 redis_client = redis.Redis(
     host=REDIS_HOST, 
     port=REDIS_PORT, 
     decode_responses=True,
-    # Optional: Add these for production
-    # ssl=True,
-    # ssl_cert_reqs=None
 )
 
+# MinIO Configuration from Environment Variables
+MINIO_URL = os.getenv('MINIO_URL', 'http://localhost:9000')
+MINIO_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY', 'minioadmin')
+MINIO_SECRET_KEY = os.getenv('MINIO_SECRET_KEY', 'minioadmin')
+MINIO_BUCKET_NAME = os.getenv('MINIO_BUCKET_NAME', 'hive-box')
+MINIO_SECURE = os.getenv('MINIO_SECURE', 'false').lower() == 'true'
+
+# Initialize MinIO client
+minio_client = Minio(
+    MINIO_URL.replace('http://', '').replace('https://', ''),
+    access_key=MINIO_ACCESS_KEY,
+    secret_key=MINIO_SECRET_KEY,
+    secure=MINIO_SECURE,
+)
+
+# Check if the bucket exists, create if not
+if not minio_client.bucket_exists(MINIO_BUCKET_NAME):
+    minio_client.make_bucket(MINIO_BUCKET_NAME)
 
 @app.get("/")
 async def read_root():
@@ -75,11 +95,9 @@ instrumentator = Instrumentator()
 # ATTACH PROMETHEUS METRICS COLLECTION TO THE APP
 instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
-
 @app.get("/version")
 def read_version():
     return {"version": "v0.0.1"}
-
 
 @app.get("/temperature")
 def read_temperature():
@@ -139,6 +157,37 @@ def read_temperature():
 
     return response_data
 
+@app.get("/store")
+async def store_temperature_data():
+    try:
+        # First, get the temperature data
+        temperature_data = read_temperature()
+        
+        # Generate a unique filename with timestamp
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"temperature_{timestamp}.json"
+        
+        # Convert the data to a JSON-formatted bytes object
+        data_bytes = json.dumps(temperature_data).encode('utf-8')
+        data_stream = io.BytesIO(data_bytes)
+        
+        # Store the file in MinIO
+        minio_client.put_object(
+            bucket_name=MINIO_BUCKET_NAME,
+            object_name=filename,
+            data=data_stream,
+            length=len(data_bytes),
+            content_type='application/json'
+        )
+        
+        return {
+            "message": "Temperature data stored successfully",
+            "filename": filename,
+            "data": temperature_data
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error storing temperature data: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
