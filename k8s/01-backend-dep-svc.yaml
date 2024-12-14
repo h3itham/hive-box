@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: hive-backend
-        image: h3itham/backend-hivebox:v1.0.9
+        image: h3itham/backend-hivebox:v1.1.0
         ports:
         - containerPort: 8000
 ---
