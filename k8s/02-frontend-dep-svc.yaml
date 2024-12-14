@@ -4,7 +4,7 @@ metadata:
   name: frontend-hivebox
   namespace: hive-box
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: frontend-hivebox
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend-hivebox
-        image: h3itham/frontend-hivebox:v1.0.5
+        image: h3itham/frontend-hivebox:v1.0.6
         ports:
         - containerPort: 80
 ---
