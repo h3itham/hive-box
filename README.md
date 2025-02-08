@@ -332,4 +332,10 @@ In this phase I decide that I should Create to component for application Fronten
   git push origin --tags
   ```
 
-### 
+### Phase 4 
+
+- Create metrics endpoint using `prometheus` which returns default Prometheus metrics about the app
+  ```python 
+  ```
+
+  
