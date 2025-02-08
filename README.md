@@ -36,8 +36,6 @@ Note that I Will use [GitFlow](https://www.atlassian.com/git/tutorials/comparing
       print_version()
   ```
 
-  
-
 * Implementing the versioning code changes in `versionFunction.py` file 
 
   ```bash 
@@ -332,10 +330,49 @@ In this phase I decide that I should Create to component for application Fronten
   git push origin --tags
   ```
 
-### Phase 4 
+## Phase 4 
 
-- Create metrics endpoint using `prometheus` which returns default Prometheus metrics about the app
-  ```python 
+
+
+### 4.1 Tools 
+
+- I learned **Kind**, but now I want to deploy the project on AWS using an **EKS** cluster, so I created it. The simplest way to do this is by using the `eksctl` tool.
+
+- Installation 
+
+  1. Download the executable:
+     ```bash
+     curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+     ```
+
+  2. add `eksctl` to executable path 
+     ```bash 
+     sudo mv /tmp/eksctl /usr/local/bin
+     ```
+
+  3. check installation 
+     ```bash 
+     ekctl version 
+     ```
+
+- Create Cluster 
+
+  ```bash
+  eksctl create cluster \
+    --name test-cluster \
+    --version 1.29 \
+    --region us-east-1 \
+    --nodegroup-name linux-nodes \
+    --node-type t2.medium \
+    --nodes 2
   ```
 
-  
+### 4.2 code 
+
+- Create metrics endpoint using `prometheus` which returns default Prometheus metrics about the app
+
+  <img src="./screenshots/04-metricsEndpoint.png" style="zoom:75%;" />
+
+- Temperature status 
+
+  ![](./screenshots/05-tempearturestatus.png)
