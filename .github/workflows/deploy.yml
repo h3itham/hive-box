@@ -42,4 +42,5 @@ jobs:
 
     - name: Build Docker image
       run: |
+        cd backend 
         docker build -t my-app:${GITHUB_SHA::8} .
