@@ -288,26 +288,29 @@ In this phase I decide that I should Create to component for application Fronten
   
       - name: Install dependencies
         run: |
+          cd backend
           python -m pip install --upgrade pip
           pip install flake8 pytest
           pip install -r requirements.txt
   
       - name: Lint Python code
         run: |
+         
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
   
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: Dockerfile
+          dockerfile: ./backend/Dockerfile
   
       - name: Run unit tests
         run: |
-          pytest
+          pytest ./backend/
   
       - name: Build Docker image
         run: |
+          cd backend 
           docker build -t my-app:${GITHUB_SHA::8} .
   ```
 
@@ -318,4 +321,15 @@ In this phase I decide that I should Create to component for application Fronten
   git push 
   ```
 
-  
+- After fix some issues, Github workflow completed successfully. 
+
+  ![](./screenshots/03-githubactionsuccess.png)
+
+- create new release tag 
+
+  ```bash 
+  git tag -a v0.3.0 -m "Release v0.3.0"
+  git push origin --tags
+  ```
+
+### 
