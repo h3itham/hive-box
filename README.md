@@ -376,3 +376,9 @@ In this phase I decide that I should Create to component for application Fronten
 - Temperature status 
 
   ![](./screenshots/05-tempearturestatus.png)
+
+### 4.4 Continuous Integration
+
+- Sonarqube Integration 
+  ![](./screenshots/06-SonarqubeIntegration.png)
+- 
