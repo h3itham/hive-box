@@ -1,0 +1,44 @@
+# prod-application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: private-application-prod
+  namespace: argocd
+spec:
+  destination:
+    namespace: hive-box-prod
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: 'https://github.com/h3itham/hive-box'
+    targetRevision: master
+    path: 'k8s/overlays/prod' 
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+# dev-application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: private-application-dev
+  namespace: argocd
+spec:
+  destination:
+    namespace: hive-box-dev
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: 'https://github.com/h3itham/hive-box'
+    targetRevision: master
+    path: 'k8s/overlays/dev' 
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
