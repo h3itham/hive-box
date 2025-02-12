@@ -1,0 +1,15 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base
+namespace: hive-box-dev
+patches:
+- path: backend-patch.yaml
+  target:
+    kind: Deployment
+    name: backend-hive
+- path: frontend-patch.yaml
+  target:
+    kind: Deployment
+    name: frontend-hivebox

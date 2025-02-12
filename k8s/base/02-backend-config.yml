@@ -1,0 +1,17 @@
+# backend-config.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: hive-box
+data:
+  SENSEBOX_IDS: "5eba5fbad46fb8001b799786,5eb99cacd46fb8001b2ce04c,5e60cf5557703e001bdae7f8"
+  PYTHONUNBUFFERED: "1"
+  REDIS_HOST: "hive-redis"
+  REDIS_PORT: "6379"
+  CACHE_TIMEOUT: "300"
+  MINIO_URL: "http://hive-minio:9000"
+  MINIO_ACCESS_KEY: "minioadmin"
+  MINIO_SECRET_KEY: "minioadmin"
+  MINIO_BUCKET_NAME: "hive-box"
+  MINIO_SECURE: "false"

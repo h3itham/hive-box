@@ -1,0 +1,21 @@
+# backend-patch.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-hive
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: hive-backend
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+        - name: ENVIRONMENT
+          value: "development"

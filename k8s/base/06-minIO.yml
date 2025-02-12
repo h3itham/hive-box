@@ -35,6 +35,7 @@ spec:
       volumes:
       - name: minio-storage
         emptyDir: {}
+
 ---
 apiVersion: v1
 kind: Service
@@ -47,8 +48,8 @@ spec:
   ports:
   - port: 9000
     targetPort: 9000
-    protocol: TCP
-  clusterIP: None
+  type: ClusterIP  # Corrected
+
 ---
 apiVersion: batch/v1
 kind: Job
@@ -66,7 +67,7 @@ spec:
         - /bin/sh
         - -c
         - |
-          mc config host add minio http://minio:9000 minioadmin minioadmin
+          mc alias set minio http://minio:9000 minioadmin minioadmin  # Match Service Name
           mc mb minio/hive-box
           mc ls minio
   backoffLimit: 4

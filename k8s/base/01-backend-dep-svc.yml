@@ -15,9 +15,12 @@ spec:
     spec:
       containers:
       - name: hive-backend
-        image: h3itham/backend-hivebox:v0.0.0
+        image: h3itham/backend-hivebox:v1.0.1
         ports:
         - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: backend-config
 ---
 apiVersion: v1
 kind: Service
