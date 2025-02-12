@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: private-application-prod
+  name: hive-box-prod
   namespace: argocd
 spec:
   destination:
@@ -25,7 +25,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: private-application-dev
+  name: hive-box-dev
   namespace: argocd
 spec:
   destination:
