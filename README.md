@@ -381,4 +381,97 @@ In this phase I decide that I should Create to component for application Fronten
 
 - Sonarqube Integration 
   ![](./screenshots/06-SonarqubeIntegration.png)
-- 
+
+
+
+## Phase 6 
+
+## Argo Cd 
+
+**Installation** 
+
+2. Create namespace 
+	```bash 
+	kubectl create namespace argocd
+	```
+3. Apply the following file 
+	```bash 
+	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	```
+4. To retrieve the admin password 
+	```bash 
+	kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d
+	```
+
+**Integration with github**
+
+1. Create access token.
+
+2. Create Project secret
+
+   ```yaml 
+   #secret.yaml 
+   apiVersion: v1
+   kind: Secret
+   metadata: 
+     name: argo-private-repo-secret
+     namespace: argocd
+     labels:
+       argocd.argoproj.io/secret-type: repository # important label
+   stringData:
+     type: git
+     url: https://github.com/h3itham/hive.git
+     username: h3itham 
+     password: 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 # Token which you created in the previous step.
+   ```
+
+3. Created two separate Application resources
+
+   ```yaml
+   # prod-application.yaml
+   apiVersion: argoproj.io/v1alpha1
+   kind: Application
+   metadata:
+     name: private-application-prod
+     namespace: argocd
+   spec:
+     destination:
+       namespace: hive-box-prod
+       server: https://kubernetes.default.svc
+     source:
+       repoURL: 'https://github.com/h3itham/hive-box'
+       targetRevision: master
+       path: 'k8s/overlays/prod'  # Assuming you'll create this directory structure
+     project: default
+     syncPolicy:
+       syncOptions:
+         - CreateNamespace=true
+       automated:
+         prune: true
+         selfHeal: true
+   
+   ---
+   # dev-application.yaml
+   apiVersion: argoproj.io/v1alpha1
+   kind: Application
+   metadata:
+     name: private-application-dev
+     namespace: argocd
+   spec:
+     destination:
+       namespace: hive-box-dev
+       server: https://kubernetes.default.svc
+     source:
+       repoURL: 'https://github.com/h3itham/hive-box'
+       targetRevision: master
+       path: 'k8s/overlays/dev'  # Assuming you'll create this directory structure
+     project: default
+     syncPolicy:
+       syncOptions:
+         - CreateNamespace=true
+       automated:
+         prune: true
+         selfHeal: true
+   ```
+
+   
