@@ -9,9 +9,11 @@ resources:
 - 01-backend-dep-svc.yml
 - 02-backend-config.yml 
 - 03-frontend-dep-svc.yml
-- 04-nginxconf.yml
-- 05-redis.yml
-- 06-minIO.yml
+- 04-frontend-ingress.yml
+- 05-nginxconf.yml
+- 06-certificate.yml
+- 07-redis.yml
+- 08-minIO.yml
 
 labels:
 - pairs:
