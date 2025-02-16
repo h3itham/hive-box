@@ -2,7 +2,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namePrefix: hive-
 namespace: hive-box
 
 resources:
@@ -12,6 +11,7 @@ resources:
 - 04-nginxconf.yml
 - 05-redis.yml
 - 06-minIO.yml
+- 07-nginx-ingress.yml
 
 labels:
 - pairs:
