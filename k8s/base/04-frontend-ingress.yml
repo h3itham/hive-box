@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-hivebox-ingress
+  namespace: hive-box
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    external-dns.alpha.kubernetes.io/hostname: hivebox.haithamelabd.com
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - prod-hivebox.haithamelabd.com
+    secretName: hivebox-tls
+  rules:
+    - host: prod-hivebox.haithamelabd.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-hivebox-service
+                port:
+                  number: 80

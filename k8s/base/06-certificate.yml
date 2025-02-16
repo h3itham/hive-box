@@ -1,0 +1,29 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: haithamelabd@outlook.com  # REPLACE WITH YOUR EMAIL
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+
+--- 
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hivebox-cert
+  namespace: hive-box
+spec:
+  secretName: hivebox-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - hivebox.haithamelabd.com
