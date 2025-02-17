@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-hivebox-ingress
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: dev-hivebox.haithamelabd.com
+spec:
+  tls:
+  - hosts:
+    - dev-hivebox.haithamelabd.com
+    secretName: hivebox-tls
+  rules:
+    - host: dev-hivebox.haithamelabd.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-hivebox-service
+                port:
+                  number: 80

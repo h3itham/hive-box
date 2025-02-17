@@ -13,3 +13,12 @@ patches:
   target:
     kind: Deployment
     name: frontend-hivebox
+- path: ingress-patch.yaml
+  target:
+    kind: Ingress
+    name: frontend-hivebox-ingress
+- path: certificate-patch.yaml
+  target:
+    kind: Certificate
+    name: hivebox-cert
+    
