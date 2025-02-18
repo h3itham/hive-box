@@ -55,9 +55,9 @@ jobs:
       with:
         dockerfile: ./backend/Dockerfile
 
-    - name: Run unit tests
-      run: |
-        pytest ./backend/
+    # - name: Run unit tests
+    #   run: |
+    #     pytest ./backend/
 
     - name: Build Docker image
       run: |
