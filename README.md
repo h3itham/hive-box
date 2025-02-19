@@ -2,22 +2,19 @@
 
 ## Introduction 
 
-<div style="display: flex; align-items: center;">
-  <img src="./screenshots/hivebox.png" alt="Hive-Box Logo" style="width: 200px; margin-right: 20px;">
-  <div>
-    <p>
-      Welcome to the <strong>Hive-Box</strong> project! This project is designed to help beekeepers work smarter and more efficiently using a scalable RESTful API. By integrating with <a href="https://www.opensensemap.org/">OpenSenseMap</a>, we aim to create a platform that simplifies daily tasks and boosts productivity for beekeepers.
-    </p>
-    <p>
-      Special thanks to <a href="https://www.linkedin.com/in/aabouzaid/">Ahmed AboZied</a> and <a href="https://devopshive.net/">DevOps Hive</a> for their contributions to the <a href="https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap/tree/main">dynamic-devops-roadmap</a>.
-    </p>
-    <p>
-      <a href="https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap">
-        <img src="https://devopshive.net/badges/dynamic-devops-roadmap.svg">
-      </a>
-    </p>
-  </div>
-</div>
+<p align="center">
+  <img src="./screenshots/hivebox.png" alt="Hive-Box Logo">
+</p>
+
+Welcome to the **Hive-Box** project! This project is designed to help beekeepers work smarter and more efficiently using a scalable RESTful API. By integrating with [OpenSenseMap](https://www.opensensemap.org/), we aim to create a platform that simplifies daily tasks and boosts productivity for beekeepers. 
+
+Special thanks to [Ahmed AboZied](https://www.linkedin.com/in/aabouzaid/) and [DevOps Hive](https://devopshive.net/) for their contributions to the [dynamic-devops-roadmap](https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap/tree/main).
+
+<p align="center">
+  <a href="https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap">
+    <img src="https://devopshive.net/badges/dynamic-devops-roadmap.svg" alt="Dynamic DevOps Roadmap">
+  </a>
+</p>
 
 
 ## Applying the Project in Your Environment
