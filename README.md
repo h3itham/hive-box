@@ -420,7 +420,7 @@ In this phase I decide that I should Create to component for application Fronten
        argocd.argoproj.io/secret-type: repository # important label
    stringData:
      type: git
-     url: https://github.com/h3itham/hive.git
+     url: https://github.com/h3itham/hive-box.git
      username: h3itham 
      password: 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 # Token which you created in the previous step.
    ```
@@ -474,4 +474,76 @@ In this phase I decide that I should Create to component for application Fronten
          selfHeal: true
    ```
 
-   
+
+
+
+
+
+## Applying the Project in Your Environment
+
+In this section, I'll walk through applying the project in a Kubernetes cluster hosted on AWS, set up using [Kubespray](https://github.com/kubernetes-sigs/kubespray). For simplicity, you can use the `eksctl` tool.
+
+#### Installation
+
+1. **Download the executable:**
+
+   ```bash
+   curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+   ```
+
+2. Add eksctl to executable path 
+
+   ```bash
+   sudo mv /tmp/eksctl /usr/local/bin
+   ```
+
+3. check installation 
+
+   ```bash 
+   eksctl version 
+   ```
+
+#### Create Cluster 
+
+Run the following command to create cluster. 
+
+```bash
+eksctl create cluster \
+  --name hivebox-cluster \
+  --version 1.29 \
+  --region us-east-1 \
+  --nodegroup-name linux-nodes \
+  --node-type t3.medium \
+  --nodes 2
+```
+
+#### Applying Hive-Box Manifests
+
+The `k8s` folder contains all the necessary Kubernetes YAML files for deploying the **Hive-Box** project. Below is an overview of the folder structure and the purpose of each file
+
+```txt
+k8s/
+├── 00-namespace.yaml         
+├── 01-backend-dep-svc.yaml   
+├── 02-frontend-dep-svc.yaml  
+├── 03-redis.yaml             
+└── 04-minIO.yaml            
+```
+
+To apply all files, run:
+
+```bash 
+kubectl apply -f k8s/ 
+```
+
+To access the frontend service, use:
+
+```bash 
+ kubectl get svc -n hive-box
+```
+
+
+
+#### Tel me more about your project 
+
+- Building Scalable Fast API System which help beekeeper in their daily chore. 

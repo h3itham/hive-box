@@ -30,3 +30,5 @@ cache/
 
 # Docker-related
 docker-compose.override.yml
+
+README.md
