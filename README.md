@@ -6,10 +6,16 @@ Welcome to the **Hive-Box** project! This project is designed to help beekeepers
 
 This hands-on project follows a Dynamic MVP approach, covering the entire Software Development Life Cycle (SDLC) and key DevOps areas like planning, coding, containers, testing, CI/CD, and infrastructure. Starting with a basic API, you’ll iteratively scale it to handle thousands of requests per second.
 
-**Special** thanks to [Ahmed AboZied](https://www.linkedin.com/in/aabouzaid/) and [DevOps Hive](https://devopshive.net/) for their contributions to the [dynamic-devops-roadmap](https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap/tree/main). [![Dynamic DevOps Roadmap](https://devopshive.net/badges/dynamic-devops-roadmap.svg)](https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap)
+**Special** thanks to [Ahmed AboZied](https://www.linkedin.com/in/aabouzaid/) and [DevOps Hive](https://devopshive.net/) for their contributions to the [dynamic-devops-roadmap](https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap/tree/main). 
+
 
 <p align="center">
   <img src="./screenshots/hivebox.png" alt="Hive-Box Logo">
+</p>
+<p align="center">
+  <a href="https://github.com/DevOpsHiveHQ/dynamic-devops-roadmap">
+    <img src="https://devopshive.net/badges/dynamic-devops-roadmap.svg" alt="Dynamic DevOps Roadmap">
+  </a>
 </p>
 
 
