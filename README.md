@@ -103,12 +103,13 @@ In this section, I'll walk through applying the project in a Kubernetes cluster 
 
   ```bash 
   eksctl create iamserviceaccount \
-    --cluster=hivebox-cluster \
-    --name=externaldns \
-    --namespace=default \
-    --attach-policy-arn=arn:aws:iam::047719625140:policy/externaldns-policy \
-    --override-existing-serviceaccounts \you
-    --approve
+  --cluster=hivebox-cluster \
+  --name externaldns \
+  --namespace default \
+  --attach-policy-arn arn:aws:iam::047719625140:policy/externaldns-policy \
+  --override-existing-serviceaccounts \
+  --approve
+
   ```
 
   
@@ -133,6 +134,10 @@ In this section, I'll walk through applying the project in a Kubernetes cluster 
    kubectl apply -f k8s/addons/ 
    ```
 
+- Retrieve ArgoCD admin password 
+  ```bash
+  kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d 
+  ``` 
 
 ## Cleanup 
 
