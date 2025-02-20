@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
       - name: frontend-hivebox
-        image: h3itham/frontend-hivebox:v1.4.0
+        image: h3itham/frontend-hivebox:v1.5.0
         resources:
           requests:
             memory: "128Mi"
