@@ -8,6 +8,6 @@ metadata:
     argocd.argoproj.io/secret-type: repository
 stringData:
   type: git
-  url: https://github.com/h3itham/hive-box.git
-  username: h3itham 
-  password:  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 # ADD YOUR GITHUB TOKEN HERE. 
+  url: https://github.com/USERNAME/REPONAME.git
+  username: GITHUB-USERNAME
+  password: ADD YOUR GITHUB TOKEN HERE. 
