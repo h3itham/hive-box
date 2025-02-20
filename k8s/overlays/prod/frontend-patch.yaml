@@ -4,6 +4,9 @@ kind: Deployment
 metadata:
   name: frontend-hivebox
 spec:
+  containers:
+  - name: frontend-hivebox
+    image: h3itham/frontend-hivebox:v1.5.0
   replicas: 1
   template:
     spec:
