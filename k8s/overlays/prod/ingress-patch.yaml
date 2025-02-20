@@ -8,4 +8,4 @@ spec:
   tls:
   - hosts:
     - prod-hivebox.haithamelabd.com
-    secretName: hivebox-tls
+    secretName: hivebox-prod-tls

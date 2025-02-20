@@ -1,7 +1,8 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: hivebox-cert
+  name: hivebox-dev-tls
 spec:
+  secretName: hivebox-dev-tls
   dnsNames:
   - dev-hivebox.haithamelabd.com

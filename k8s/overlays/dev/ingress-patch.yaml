@@ -8,7 +8,7 @@ spec:
   tls:
   - hosts:
     - dev-hivebox.haithamelabd.com
-    secretName: hivebox-tls
+    secretName: hivebox-dev-tls
   rules:
     - host: dev-hivebox.haithamelabd.com
       http:
