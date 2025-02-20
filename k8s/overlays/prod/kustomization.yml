@@ -20,4 +20,4 @@ patches:
 - path: certificate-patch.yaml
   target:
     kind: Certificate
-    name: hivebox-cert
+    name: hivebox-tls
