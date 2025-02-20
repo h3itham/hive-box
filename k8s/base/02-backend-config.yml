@@ -7,7 +7,7 @@ metadata:
 data:
   SENSEBOX_IDS: "5eba5fbad46fb8001b799786,5eb99cacd46fb8001b2ce04c,5e60cf5557703e001bdae7f8"
   PYTHONUNBUFFERED: "1"
-  REDIS_HOST: "hive-redis"
+  REDIS_HOST: "redis"
   REDIS_PORT: "6379"
   CACHE_TIMEOUT: "300"
   MINIO_URL: "http://minio:9000"
